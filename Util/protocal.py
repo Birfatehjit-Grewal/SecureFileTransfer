@@ -183,14 +183,14 @@ def create_encryption_packet(data, fin_flag, iv, hmac):
 
     The encryption header format is:
     First byte: Fin flag representing if this is the last packet
-    32 bytes: The IV used for encryption in the AES-CBC (128-bit key version)
     32 bytes: The HMAC used to verify the integrity of the data
+    16 bytes: The IV used for encryption in the AES-CBC (128-bit key version)
     Remaining bytes: The contents of the file segment being transferred
 
     Parameters:
         data (bytes): The encrypted file segment
         fin_flag (bool): A flag to signify if this is the last file segment
-        IV (bytes): 32 bytes that were used to encrypt the file segment
+        IV (bytes): 16 bytes that were used to encrypt the file segment
         HMAC (bytes): 32 bytes used to ensure data integrity
 
     Returns:
@@ -207,8 +207,8 @@ def parse_encryption_packet(data):
 
     The encryption header format is:
         First byte: Fin flag representing if this is the last packet
-        16 bytes: The IV used for encryption in the AES-CBC (128-bit key version)
         32 bytes: The HMAC used to verify the integrity of the data
+        16 bytes: The IV used for encryption in the AES-CBC (128-bit key version)
         Remaining bytes: The contents of the file segment being transferred
 
     Parameters:
@@ -217,8 +217,8 @@ def parse_encryption_packet(data):
     Returns:
         tuple[bool, bytes, bytes, bytes]:
             fin_flag (bool): A flag to signify if this is the last file segment
-            IV (bytes): 16 bytes that were used to encrypt the file segment
             HMAC (bytes): 32 bytes used to ensure data integrity
+            IV (bytes): 16 bytes that were used to encrypt the file segment
             file_contents (bytes): contents of the encrypted file segment
     """
     isFin = data[:1]
